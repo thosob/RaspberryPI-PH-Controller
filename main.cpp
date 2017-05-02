@@ -259,13 +259,21 @@ string floatToString(float f){
     std::string s(ss.str());
     return s;
 }
-
+/**
+ * @brief converts integer to string
+ * @param i
+ * @return 
+ */
 string intToString(int i){
     ostringstream convert;
     convert << i;
     return convert.str();
 }
-
+/**
+ * @brief gets temperature in celsius
+ * @param i temperature assigned 
+ * @return temperature in celsius
+ */
 float getTemperatureCelsius(int i){        
     string line;
     string filename;
@@ -357,7 +365,7 @@ int main(int argc, char *argv[]) {
         //mean = getMeanMeasurements(65535, ph_Probe_Address,i2c_Port);
         //Debug
        
-        mean = getMeanMeasurements(5, ph_Probe_Address,3);
+        mean = getMeanMeasurements(255, ph_Probe_Address,3);
         if(mean > 0){
             measurement_mV = floatToString(mean);
             ph_Value = floatToString(calculateNernstEquation( mean , temperature_K));
