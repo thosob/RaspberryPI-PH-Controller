@@ -13,6 +13,8 @@
         <gdb_interceptlist>
           <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
         </gdb_interceptlist>
+        <gdb_signals>
+        </gdb_signals>
         <gdb_options>
           <DebugOptions>
           </DebugOptions>
@@ -24,18 +26,18 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1960 1720 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1960 1745 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1960 1757.72 1578</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:0 1960 1757.72 1578</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:1 1960 1757.72 1578</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:2 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:3 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:4 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:0 1960 1757.72 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:0 1960 1757.72 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:1 1960 1757.72 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:2 1960 1757.72 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:2 1960 1757.77 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:2 1960 1757.77 1578</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:0 1960 1757.72 1578</runcommand>
+        <runcommand>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:2 1960 1757.77 1578</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

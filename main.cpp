@@ -14,6 +14,19 @@
 #include <wiringPiI2C.h>   
 #include <fstream>
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <inttypes.h> 
+#include <fstream>
+#include <sstream>
+#include <unistd.h>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
+#include <cstdint>
+  
 
 
 using namespace std;
@@ -103,24 +116,101 @@ float makeTemperatureCorrection(float temperature_C){
     
 }
 
+int readADC_SingleEnded(int fd, int channel) {
+
+    int ADS_address = fd; // Address of our device on the I2C bus
+    int I2CFile;
+
+    uint8_t writeBuf[3]; // Buffer to store the 3 bytes that we write to the I2C device
+    uint8_t readBuf[2]; // 2 byte buffer to store the data read from the I2C device
+
+    int16_t val; // Stores the 16 bit value of our ADC conversion
+
+    I2CFile = open("/dev/i2c-1", O_RDWR); // Open the I2C device
+
+    ioctl(I2CFile, I2C_SLAVE, ADS_address); // Specify the address of the I2C Slave to communicate with
+
+    // These three bytes are written to the ADS1115 to set the config register and start a conversion 
+    // There are 3 registers  one is the config register which is accessed by writing one to the buffer    
+    writeBuf[0] = 1; // This sets the pointer register so that the following two bytes write to the config register
+    // Modifying adressing part
+    // 100 : AIN P = AIN0 and AIN N = GND => Results in 0xC3 11000011 CHANNEL 0
+    // 101 : AIN P = AIN1 and AIN N = GND => Results in 0xD3 11010011 CHANNEL 1
+    // 110 : AIN P = AIN2 and AIN N = GND => Results in 0xE3 11100011 CHANNEL 2
+    // 111 : AIN P = AIN3 and AIN N = GND => Results in 0xF3 11110011 CHANNEL 3
+    switch(channel){
+        //set up 0
+        case 0: writeBuf[1] = 0xC3; break;
+        //set up 1
+        case 1: writeBuf[1] = 0xD3; break;
+        //set up 2
+        case 2: writeBuf[1] = 0xE3; break;
+        //set up channel 3
+        case 3: writeBuf[1] = 0xF3; break;
+        //set up default is channel 0
+        default: writeBuf[1] = 0xC3; break;
+    }
+    
+    //writeBuf[1] = 0xC3; // This sets the 8 MSBs of the config register (bits 15-8) to 11000011
+    writeBuf[2] = 0x03; // This sets the 8 LSBs of the config register (bits 7-0) to 00000011
+
+    // Initialize the buffer used to read data from the ADS1115 to 0
+    readBuf[0] = 0;
+    readBuf[1] = 0;
+
+    // Write writeBuf to the ADS1115, the 3 specifies the number of bytes we are writing,
+    // this begins a single conversion
+    write(I2CFile, writeBuf, 3);
+
+    // Wait for the conversion to complete, this requires bit 15 to change from 0->1
+    while ((readBuf[0] & 0x80) == 0) // readBuf[0] contains 8 MSBs of config register, AND with 10000000 to select bit 15
+    {
+        read(I2CFile, readBuf, 2); // Read the config register into readBuf
+    }
+
+    writeBuf[0] = 0; // Set pointer register to 0 to read from the conversion register
+    write(I2CFile, writeBuf, 1);
+
+    read(I2CFile, readBuf, 2); // Read the contents of the conversion register into readBuf
+
+    val = readBuf[0] << 8 | readBuf[1]; // Combine the two bytes of readBuf into a single 16 bit result 
+
+    //printf("Voltage Reading %f (V) \n", (float) val * 4.096 / 32767.0); // Print the result to terminal, first convert from binary value to mV
+
+    close(I2CFile);
+    return val;
+}
+
 /**
  * @brief mV of the probe
  * @param file_Descriptor
  * @return Voltage
  */
-float get_Probe_mV(int ph_Probe_Address, int i2c_Port){
-    //Loading phAdress    
-    int raw = wiringPiI2CReadReg16(ph_Probe_Address, i2c_Port);
-    raw = raw >> 8 | ((raw << 8) &0xffff);
-    //std::cout << raw << endl;
-    //3.3 equals the voltage
-    //Design Decision: 3.3V implementation   
-    //4096 - 12bit in total 
-    if(raw > 0){
-        return (((float) raw / 4096) * 3.3) * 1000;
+float get_Probe_mV(int i2c_Address, int i2c_Port){
+    //Sparkfun i2c is built in -> special case
+    if(i2c_Address == 77){
+        //we have to set it to zero, regardless whats read in console param
+        i2c_Port = 0;
+        //and we have to the special configuration of wiringpi
+        uint wired_Address = wiringPiI2CSetup(i2c_Address);
+        //Loading phAdress - using wiringPi, so using special address range  
+        int raw = wiringPiI2CReadReg16(wired_Address, i2c_Port);
+        raw = raw >> 8 | ((raw << 8) &0xffff);
+        //std::cout << raw << endl;
+        //3.3 equals the voltage
+        //Design Decision: 3.3V implementation   
+        //4096 - 12bit in total 
+        if(raw > 0){
+            return (((float) raw / 4096) * 3.3) * 1000;
+        }
+        else{
+            return -1;
+        }
     }
     else{
-        return -1;
+        //normal case
+        return readADC_SingleEnded(i2c_Address, i2c_Port) * 4.096 / 32767.0;
+        
     }
 }
 /**
@@ -199,15 +289,17 @@ float calculateNernstEquation(float mean_measurements, float temperature_K){
  * @param ph_probe_Address
  * @return mean > 0 if enough data was collected, else -1 
  */
-float getMeanMeasurements(int measurement_size,int ph_Probe_Address, int i2c_Port){
+float getMeanMeasurements(int measurement_size,int i2c_Address, int i2c_Port){
     float measurements[measurement_size]; 
     float mean_measurements = 0.0;
     float mV = 0.0;
     int valid_data = 0;
     
+   
+    
     for(int i = 0; i < measurement_size; i++){            
         //Gets mV from Probe    
-        mV = get_Probe_mV(ph_Probe_Address, i2c_Port);
+        mV = get_Probe_mV(i2c_Address, i2c_Port);
         //if Probe Value is valid
         if(mV > 0){
             //add to measurements array
@@ -337,7 +429,7 @@ int main(int argc, char *argv[]) {
     ph7 = stof(argv[4]);
     ph9 = stof(argv[5]);
     
-    
+    //Here is still some bug
     uint i2c_Address = stoi(i2c_FD); //0x4d;
     uint i2c_Port = stoi(ph_Address);
     //stoi(ph_Address);
@@ -357,15 +449,14 @@ int main(int argc, char *argv[]) {
     if(i2c_Address >= 0){                        
         //Setting Up Gpio
         wiringPiSetupGpio();
-        //Access ph-Probe
-        ph_Probe_Address = wiringPiI2CSetup(i2c_Address);     
-        ph_Probe_Address_String = intToString(ph_Probe_Address);
+        //Access ph-Probe          
+        ph_Probe_Address_String = intToString(i2c_Address);
                       
         //Calculate Mean Value
         //mean = getMeanMeasurements(65535, ph_Probe_Address,i2c_Port);
         //Debug
        
-        mean = getMeanMeasurements(255, ph_Probe_Address,3);
+        mean = getMeanMeasurements(255, i2c_Address,i2c_Port);
         if(mean > 0){
             measurement_mV = floatToString(mean);
             ph_Value = floatToString(calculateNernstEquation( mean , temperature_K));
