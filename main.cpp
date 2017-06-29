@@ -187,8 +187,8 @@ int readADC_SingleEnded(int fd, int channel) {
  * @return Voltage
  */
 float get_Probe_mV(int i2c_Address, int i2c_Port){
-    //Sparkfun i2c is built in -> special case
-    if(i2c_Address == 77){
+    //Sparkfun i2c is built in -> default case
+    //if(i2c_Address == 77){
         //we have to set it to zero, regardless whats read in console param
         i2c_Port = 0;
         //and we have to the special configuration of wiringpi
@@ -206,12 +206,11 @@ float get_Probe_mV(int i2c_Address, int i2c_Port){
         else{
             return -1;
         }
-    }
-    else{
-        //normal case
-        return readADC_SingleEnded(i2c_Address, i2c_Port) * 4.096 / 32767.0;
-        
-    }
+    //}
+    //else{
+        //special case
+        //return readADC_SingleEnded(i2c_Address, i2c_Port) * 4.096 / 32767.0;        
+    //}
 }
 /**
  * @brief converts celsius to Kelvin

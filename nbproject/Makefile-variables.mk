@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux
-CND_ARTIFACT_NAME_Debug=aqualight-phcontroller
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/aqualight-phcontroller
+CND_ARTIFACT_NAME_Debug=raspberrypi-ph-controller
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux/raspberrypi-ph-controller
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
-CND_PACKAGE_NAME_Debug=aqualight-phcontroller.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/aqualight-phcontroller.tar
+CND_PACKAGE_NAME_Debug=raspberrypi-ph-controller.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/raspberrypi-ph-controller.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
-CND_ARTIFACT_NAME_Release=aqualight-phcontroller
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/aqualight-phcontroller
+CND_ARTIFACT_NAME_Release=raspberrypi-ph-controller
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/raspberrypi-ph-controller
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
-CND_PACKAGE_NAME_Release=aqualight-phcontroller.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/aqualight-phcontroller.tar
+CND_PACKAGE_NAME_Release=raspberrypi-ph-controller.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/raspberrypi-ph-controller.tar
 #
 # include compiler specific variables
 #

@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Aqualight-PhController
+PROJECTNAME=RaspberryPI-PH-Controller
 
 # Active Configuration
 DEFAULTCONF=Debug
