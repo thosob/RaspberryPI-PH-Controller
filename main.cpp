@@ -187,30 +187,22 @@ int readADC_SingleEnded(int fd, int channel) {
  * @return Voltage
  */
 float get_Probe_mV(int i2c_Address, int i2c_Port){
-    //Sparkfun i2c is built in -> default case
-    //if(i2c_Address == 77){
-        //we have to set it to zero, regardless whats read in console param
-        i2c_Port = 0;
-        //and we have to the special configuration of wiringpi
-        uint wired_Address = wiringPiI2CSetup(i2c_Address);
-        //Loading phAdress - using wiringPi, so using special address range  
-        int raw = wiringPiI2CReadReg16(wired_Address, i2c_Port);
-        raw = raw >> 8 | ((raw << 8) &0xffff);
-        //std::cout << raw << endl;
-        //3.3 equals the voltage
-        //Design Decision: 3.3V implementation   
-        //4096 - 12bit in total 
-        if(raw > 0){
-            return (((float) raw / 4096) * 3.3) * 1000;
-        }
-        else{
-            return -1;
-        }
-    //}
-    //else{
-        //special case
-        //return readADC_SingleEnded(i2c_Address, i2c_Port) * 4.096 / 32767.0;        
-    //}
+    i2c_Port = 0;
+    //and we have to the special configuration of wiringpi
+    uint wired_Address = wiringPiI2CSetup(i2c_Address);
+    //Loading phAdress - using wiringPi, so using special address range  
+    int raw = wiringPiI2CReadReg16(wired_Address, i2c_Port);
+    raw = raw >> 8 | ((raw << 8) &0xffff);
+    //std::cout << raw << endl;
+    //3.3 equals the voltage
+    //Design Decision: 3.3V implementation   
+    //4096 - 12bit in total 
+    if(raw > 0){
+        return (((float) raw / 4096) * 3.3) * 1000;
+    }
+    else{
+        return -1;
+    }  
 }
 /**
  * @brief converts celsius to Kelvin

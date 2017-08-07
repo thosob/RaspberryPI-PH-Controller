@@ -26,8 +26,6 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:3 1960 1757.72 1578</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:4 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:0 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:0 1960 1757.72 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 72:1 1960 1757.72 1578</runcommandpicklistitem>
@@ -36,8 +34,10 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77:2 1960 1757.77 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 78 1960 1757.77 1578</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1960 1757.77 1578</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1799 1644 1520</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 79 1829 1658 1539</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 77 1960 1757.77 1578</runcommand>
+        <runcommand>"${OUTPUT_PATH}" /sys/devices/w1_bus_master1/28-051690467fff/w1_slave 79 1829 1658 1539</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
